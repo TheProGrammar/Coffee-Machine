@@ -37,7 +37,7 @@ def make_coffee(coffee_choice):
 
 
 def print_report():
-    print("Checking ingredients. Please wait...")
+    print("Printing report. Please wait...")
     time.sleep(2)
 
     print("Current resources are: \n"
