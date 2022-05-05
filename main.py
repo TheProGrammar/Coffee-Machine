@@ -6,9 +6,31 @@ beverage_list = ["espresso", "latte", "cappuccino"]
 accepted_answers = [beverage_list, "off", "report"]
 
 
-def process_coins():
-    print("Coins processed")
-    pass
+def process_coins(coffee_choice):
+    cost = MENU[coffee_choice]["cost"]
+
+    run = True
+
+    while run:
+        print(f"\nThe cost of your {coffee_choice} is ${cost}.\n"
+              f"Please insert coins.")
+
+        quarters_input = int(input("How many quarters? ")) * 0.25
+        dimes_input = int(input("How many dimes? ")) * 0.1
+        nickels_input = int(input("How many nickels? ")) * 0.05
+        pennies_input = int(input("How many pennies? ")) * 0.01
+
+        total_amount_inserted = round(quarters_input + dimes_input + nickels_input + pennies_input, 2)
+        difference_amount = total_amount_inserted - cost
+
+        print(f"You inserted ${total_amount_inserted}.")
+
+        if total_amount_inserted > cost:
+            print(f"Your change is: ${round(difference_amount, 2)}")
+            make_coffee(coffee_choice)
+            break
+        else:
+            print(f"You did not insert enough funds. ${abs(difference_amount)} more is needed.")
 
 
 def check_ingredients(coffee_choice):
@@ -32,8 +54,14 @@ def check_ingredients(coffee_choice):
 
 
 def make_coffee(coffee_choice):
-    print("Drink chosen")
-    pass
+    global running
+    print(f"Making your {coffee_choice}...")
+    time.sleep(2)
+
+    if input("\nWould you like another drink? Yes or No: ").lower().startswith("y"):
+        pass
+    else:
+        running = False
 
 
 def print_report():
@@ -47,19 +75,32 @@ def print_report():
           f"Money: ${resources['money']}\n")
 
 
+def turn_off():
+    print("Turning off...")
+    time.sleep(2)
+    print("Goodbye")
+
+
 running = True
 
 while running:
-    user_prompt = input("What would you like? Espresso/Latte/Cappuccino: ")
+    user_prompt = input("What would you like? Espresso/Latte/Cappuccino: ").lower()
 
     if user_prompt == "off":
-        print("Goodbye...")
+        turn_off()
         running = False
-        break
+
     elif user_prompt == "report":
         print_report()
+
     elif user_prompt in beverage_list:
-        print(check_ingredients(user_prompt))
+        if check_ingredients(user_prompt):
+            # If machine have enough resources
+            process_coins(user_prompt)
+        else:
+            # In case of insufficient resources
+            pass
+
     else:
         print("Please choose valid options only")
         continue
