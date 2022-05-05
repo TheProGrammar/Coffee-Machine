@@ -7,12 +7,14 @@ accepted_answers = [beverage_list, "off", "report"]
 
 
 def process_coins(coffee_choice):
+    """Calculates the amount of money needed for chosen coffee.
+    Sums up the inserted coins and gives back change if needed.
+    Will repeat the process if not enough coins were inserted."""
+
     cost = MENU[coffee_choice]["cost"]
 
-    run = True
-
-    while run:
-        print(f"\nThe cost of your {coffee_choice} is ${cost}.\n"
+    while True:
+        print(f"\nThe cost of {coffee_choice} is ${cost}.\n"
               f"Please insert coins.")
 
         quarters_input = int(input("How many quarters? ")) * 0.25
@@ -54,17 +56,24 @@ def check_ingredients(coffee_choice):
 
 
 def make_coffee(coffee_choice):
+    """Simulates the process of making the chosen coffee.
+    Will ask user for further action."""
+
     global running
     print(f"Making your {coffee_choice}...")
     time.sleep(2)
+    print("Your coffee is ready! Here you go ☕")
 
     if input("\nWould you like another drink? Yes or No: ").lower().startswith("y"):
         pass
     else:
+        turn_off()
         running = False
 
 
 def print_report():
+    """Print report stating the current amount of resources in the machine"""
+
     print("Printing report. Please wait...")
     time.sleep(2)
 
@@ -76,6 +85,7 @@ def print_report():
 
 
 def turn_off():
+    """Turn off the machine/program with a goodbye message."""
     print("Turning off...")
     time.sleep(2)
     print("Goodbye")
@@ -84,6 +94,7 @@ def turn_off():
 running = True
 
 while running:
+    # Main program loop
     user_prompt = input("What would you like? Espresso/Latte/Cappuccino: ").lower()
 
     if user_prompt == "off":
