@@ -29,6 +29,7 @@ def process_coins(coffee_choice):
 
         if total_amount_inserted > cost:
             print(f"Your change is: ${round(difference_amount, 2)}")
+            update_resources(coffee_choice)
             make_coffee(coffee_choice)
             break
         else:
@@ -53,6 +54,23 @@ def check_ingredients(coffee_choice):
             return True
         else:
             return False
+
+
+def not_enough_resources(user_choice):
+    print(f"\nThere is not enough ingredients to make your {user_choice}.")
+    print("We are sorry about this.")
+    print("")
+
+
+def update_resources(user_choice):
+    ingredients = MENU[user_choice]["ingredients"]
+
+    resources["water"] -= ingredients["water"]
+    resources["coffee"] -= ingredients["coffee"]
+    resources["money"] += MENU[user_choice]["cost"]
+
+    if not user_choice.lower().startswith("e"):
+        resources["milk"] -= ingredients["milk"]
 
 
 def make_coffee(coffee_choice):
@@ -106,11 +124,11 @@ while running:
 
     elif user_prompt in beverage_list:
         if check_ingredients(user_prompt):
-            # If machine have enough resources
+            # If machine has enough resources
             process_coins(user_prompt)
         else:
             # In case of insufficient resources
-            pass
+            not_enough_resources(user_prompt)
 
     else:
         print("Please choose valid options only")
